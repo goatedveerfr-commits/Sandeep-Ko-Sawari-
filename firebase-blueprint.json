@@ -1,0 +1,93 @@
+{
+  "entities": {
+    "PlayerProfile": {
+      "title": "PlayerProfile",
+      "description": "User game progress, coins, upgrades, and unlocked vehicles in Sandeep Ki Sawari",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase User ID"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Player display name"
+        },
+        "coins": {
+          "type": "integer",
+          "description": "Current total coin balance"
+        },
+        "highScore": {
+          "type": "integer",
+          "description": "Highest score achieved"
+        },
+        "totalDistanceMeters": {
+          "type": "integer",
+          "description": "Total distance traveled across deliveries"
+        },
+        "parcelsDelivered": {
+          "type": "integer",
+          "description": "Total completed delivery missions"
+        },
+        "selectedScooterId": {
+          "type": "string",
+          "description": "Currently equipped scooter ID"
+        },
+        "unlockedScooters": {
+          "type": "array",
+          "description": "List of unlocked scooter IDs"
+        },
+        "speedLevel": {
+          "type": "integer",
+          "description": "Scooter top speed level (1-5)"
+        },
+        "accelLevel": {
+          "type": "integer",
+          "description": "Scooter acceleration level (1-5)"
+        },
+        "handlingLevel": {
+          "type": "integer",
+          "description": "Scooter handling level (1-5)"
+        },
+        "hornBlastLevel": {
+          "type": "integer",
+          "description": "Horn blast ability level (1-5)"
+        },
+        "shieldLevel": {
+          "type": "integer",
+          "description": "Delivery shield armor level (1-5)"
+        },
+        "coinMagnetLevel": {
+          "type": "integer",
+          "description": "Coin magnet range level (1-5)"
+        },
+        "scoreMultiplierLevel": {
+          "type": "integer",
+          "description": "Score multiplier duration level (1-5)"
+        },
+        "deliveryBonusLevel": {
+          "type": "integer",
+          "description": "Delivery time bonus reward level (1-5)"
+        },
+        "completedMissions": {
+          "type": "array",
+          "description": "IDs of completed delivery missions"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last updated server timestamp"
+        }
+      },
+      "required": ["userId", "coins", "highScore", "selectedScooterId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/profile/{docId}": {
+      "schema": {
+        "$ref": "#/entities/PlayerProfile"
+      },
+      "description": "Player game progress and upgrade profile isolated to the authenticated user"
+    }
+  }
+}

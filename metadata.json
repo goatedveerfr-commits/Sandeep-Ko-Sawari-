@@ -1,0 +1,6 @@
+{
+  "name": "Sandeep Ki Sawari",
+  "description": "Navigate busy Indian traffic on Sandeep's delivery scooter, dodge iconic vehicles, collect coins, and upgrade your rides and abilities!",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

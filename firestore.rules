@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidPlayerProfile(data) {
+      return data.keys().hasAll(['userId', 'coins', 'highScore', 'selectedScooterId']) &&
+             data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.coins is int && data.coins >= 0 &&
+             data.highScore is int && data.highScore >= 0 &&
+             data.selectedScooterId is string &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() < 100)) &&
+             (!('totalDistanceMeters' in data) || (data.totalDistanceMeters is int && data.totalDistanceMeters >= 0)) &&
+             (!('parcelsDelivered' in data) || (data.parcelsDelivered is int && data.parcelsDelivered >= 0)) &&
+             (!('unlockedScooters' in data) || data.unlockedScooters is list) &&
+             (!('speedLevel' in data) || (data.speedLevel is int && data.speedLevel >= 1 && data.speedLevel <= 10)) &&
+             (!('accelLevel' in data) || (data.accelLevel is int && data.accelLevel >= 1 && data.accelLevel <= 10)) &&
+             (!('handlingLevel' in data) || (data.handlingLevel is int && data.handlingLevel >= 1 && data.handlingLevel <= 10)) &&
+             (!('hornBlastLevel' in data) || (data.hornBlastLevel is int && data.hornBlastLevel >= 1 && data.hornBlastLevel <= 10)) &&
+             (!('shieldLevel' in data) || (data.shieldLevel is int && data.shieldLevel >= 1 && data.shieldLevel <= 10)) &&
+             (!('coinMagnetLevel' in data) || (data.coinMagnetLevel is int && data.coinMagnetLevel >= 1 && data.coinMagnetLevel <= 10)) &&
+             (!('scoreMultiplierLevel' in data) || (data.scoreMultiplierLevel is int && data.scoreMultiplierLevel >= 1 && data.scoreMultiplierLevel <= 10)) &&
+             (!('deliveryBonusLevel' in data) || (data.deliveryBonusLevel is int && data.deliveryBonusLevel >= 1 && data.deliveryBonusLevel <= 10)) &&
+             (!('completedMissions' in data) || data.completedMissions is list) &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time));
+    }
+
+    match /users/{userId}/profile/{docId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidPlayerProfile(request.resource.data);
+      allow delete: if isOwner(userId);
+    }
+  }
+}
